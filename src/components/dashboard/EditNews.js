@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
 import DefaultImg from '../../img/default-img.png'
 import {loadSingleDataUser, editNewsUser} from '../../store/actions/NewsActions'
+import { loadCategoryUser } from '../../store/actions/CategoryActions'
 
 class EditNews extends Component {
 
@@ -23,6 +24,9 @@ class EditNews extends Component {
     console.log(this.props);
     const { id } = this.props.match.params;
     this.props.loadSingleDataUser(id);
+
+    const page = "";
+    this.props.loadCategoryUser(page);
   }
   
   componentDidUpdate = async(prevProps,prevState) =>{
@@ -67,6 +71,7 @@ class EditNews extends Component {
 
   render() {
     const {newsResponse} = this.props; 
+    const {loadCategories} = this.props;
 
     return (
       <div>
@@ -88,12 +93,17 @@ class EditNews extends Component {
           onChange={this.handleChange}
           />
 
-          <label id="demo-simple-select-label">Category</label>
-
-          <select style={{margin: 10}} id="category_id" className="form-control" width="100" onChange={this.handleChange}>
-            <option value="1">Sports</option>
-            <option value="2">Entertainment</option>
-          </select>
+          <div className="row">
+            <label className="col-sm-2" id="demo-simple-select-label">Category</label>
+            <div className="col-sm-9">
+              <select style={{margin: 7}} id="category_id" className="form-control" onChange={this.handleChange}>
+                <option>Select Category</option>
+                {loadCategories && loadCategories.hasOwnProperty('data') ? loadCategories.data.data.map(row => (
+                  <option value={row.id}>{row.title}</option>
+                )) :null }
+              </select>
+            </div>
+          </div>
 
           <TextField
             id="description"
@@ -137,14 +147,16 @@ class EditNews extends Component {
 const mapStateToProps = (state)=> {
   return{
     loadSingleNews: state.news.loadSingleNews,
-    newsResponse : state.news.newsResponse
+    newsResponse : state.news.newsResponse,
+    loadCategories: state.category.loadCategories
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return{
     loadSingleDataUser: (id) => dispatch(loadSingleDataUser(id)),
-    editNewsUser: (credentials, id) => dispatch(editNewsUser(credentials, id))   
+    editNewsUser: (credentials, id) => dispatch(editNewsUser(credentials, id)),
+    loadCategoryUser: (page) => dispatch(loadCategoryUser(page))  
   }   
 }
 
