@@ -16,7 +16,7 @@ export const addNewNews = (credentials) => {
  
 export const loadNews = (page) => {
   let token = localStorage.getItem('user');
-  let pager = 2;
+  let pager = 10;
   let newsDataUrl;
 
   if(page == "") {
@@ -36,7 +36,7 @@ export const loadNews = (page) => {
 
 export const loadSearchNews = (search_content, page) => {
   let token = localStorage.getItem('user');
-  let pager = 2;
+  let pager = 10;
   let newsDataUrl;
 
   if(page == "") {

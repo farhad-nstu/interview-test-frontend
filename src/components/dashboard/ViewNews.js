@@ -100,9 +100,9 @@ class ViewNews extends Component {
                 <TableCell component="th" scope="row">
                   {row.title}
                 </TableCell>
-                <TableCell align="right">{row.category_id}</TableCell>
+                <TableCell align="right">{row.category}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.user_id}</TableCell>
+                <TableCell align="right">{loadNews.author}</TableCell>
                 <TableCell align="right">     
                   <img src={loadNews.file_directory+"/"+row.image_file} width={50} height={50} />
                 </TableCell>
@@ -136,7 +136,7 @@ class ViewNews extends Component {
         </Table>
 
         {loadNews? 
-          <Pagination defaultPageSize={2} current={loadNews.data.current_page}
+          <Pagination defaultPageSize={10} current={loadNews.data.current_page}
           className="pagination-restyle"
           total={loadNews.data.total} 
           onChange={this.onChange} 

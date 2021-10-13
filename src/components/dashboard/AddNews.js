@@ -6,7 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
 import  { addNewsUser } from  '../../store/actions/NewsActions'
-
+import { loadCategoryUser } from '../../store/actions/CategoryActions'
 
 class AddNews extends Component {
 
@@ -20,13 +20,18 @@ class AddNews extends Component {
     }
   }
 
+  componentDidMount = () => {
+    const page = "";
+    this.props.loadCategoryUser(page);
+  }
+
   handleChange = (e) => {
     this.setState({
       [e.target.id] :e.target.value
     })
   }
     
-    //this converts a blob type image to base64 encoded string
+  //this converts a blob type image to base64 encoded string
   getBase64 = (file, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load',()=>callback(reader.result));
@@ -49,6 +54,7 @@ class AddNews extends Component {
 
   render() {
     const {newsResponse} = this.props; 
+    const {loadCategories} = this.props;
 
     return (
       <div>
@@ -69,7 +75,17 @@ class AddNews extends Component {
             onChange={this.handleChange}
           />
 
-          
+          <div className="row">
+            <label className="col-sm-2" id="demo-simple-select-label">Category</label>
+            <div className="col-sm-9">
+              <select style={{margin: 7}} id="category_id" className="form-control" onChange={this.handleChange}>
+                <option>Select Category</option>
+                {loadCategories && loadCategories.hasOwnProperty('data') ? loadCategories.data.data.map(row => (
+                  <option value={row.id}>{row.title}</option>
+                )) :null }
+              </select>
+            </div>
+          </div>
     
           <TextField
             id="description"
@@ -101,13 +117,15 @@ class AddNews extends Component {
 
 const mapDisPatchToProps = (dispatch) => {
   return {
-    addNewsUser: (creds) => dispatch(addNewsUser(creds))
+    addNewsUser: (creds) => dispatch(addNewsUser(creds)),
+    loadCategoryUser: (page) => dispatch(loadCategoryUser(page))
   }
 }
 
 const mapStateToProps = (state) => {
   return{
-    newsResponse:state.news.newsResponse
+    newsResponse:state.news.newsResponse,
+    loadCategories: state.category.loadCategories
   }
 }
 
